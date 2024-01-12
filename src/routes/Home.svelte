@@ -4,6 +4,8 @@ import Nav from "../components/Nav.svelte";
 import ButtonGradient from "../components/ButtonGradient.svelte";
 
 let userEmail: string = "";
+//TODO : TRANSFORM THIS PAGE TO A REAL LOGIN PAGE
+//TODO : THEN I WILL CREATE THE REAL HOME PAGE FOR THE CONNECTED USER
 </script>
 
 <div class="h-full flex flex-col justify-between">
