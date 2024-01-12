@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
 import Footer from "../components/Footer.svelte";
 import Nav from "../components/Nav.svelte";
 import ButtonGradient from "../components/ButtonGradient.svelte";
+
+let userEmail: string = "";
 </script>
 
 <div class="h-full flex flex-col justify-between">
@@ -29,14 +31,14 @@ import ButtonGradient from "../components/ButtonGradient.svelte";
                         Connecte-toi ou crée un compte pour jouer
                     </label>
                     <input
-                            class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+                            class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-150 ease-in-out"
                             id="emailaddress"
                             type="text"
                             placeholder="tonmail@gmail.com"
+                            bind:value={userEmail}
                     />
                 </div>
-
-                <ButtonGradient/>
+                <ButtonGradient text="Jouer" disabled={userEmail.trim().length === 0}/>
             </form>
         </div>
 
