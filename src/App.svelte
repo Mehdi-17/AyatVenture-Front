@@ -1,11 +1,12 @@
 <script lang="ts">
-
-    import ButtonGradient from "./components/ButtonGradient.svelte";
-    import Footer from "./components/Footer.svelte";
-    import Nav from "./components/Nav.svelte";
+    import {Router, Route} from "svelte-routing";
     import Home from "./routes/Home.svelte";
+
+    export let url = "";
 </script>
 
 <main class="h-full text-indigo-400">
-    <Home />
+    <Router {url}>
+        <Route path="" component={Home}/>
+    </Router>
 </main>
