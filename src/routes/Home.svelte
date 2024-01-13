@@ -5,8 +5,6 @@ import ButtonGradient from "../components/ButtonGradient.svelte";
 
 let userEmail: string = "";
 let password: string = "";
-//TODO : TRANSFORM THIS PAGE TO A REAL LOGIN PAGE
-//TODO : THEN I WILL CREATE THE REAL HOME PAGE FOR THE CONNECTED USER
 </script>
 
 <div class="h-full flex flex-col justify-between">
@@ -33,6 +31,7 @@ let password: string = "";
                     <label class="block text-primary py-2 font-bold mb-2" for="emailaddress">
                         Connecte-toi ou crée un compte pour jouer
                     </label>
+<!--TODO : Here display different form depending on if we want to sign up or sign in-->
                     <input
                             class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-150 ease-in-out"
                             id="emailaddress"
