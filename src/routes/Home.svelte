@@ -4,6 +4,7 @@ import Nav from "../components/Nav.svelte";
 import ButtonGradient from "../components/ButtonGradient.svelte";
 
 let userEmail: string = "";
+let password: string = "";
 //TODO : TRANSFORM THIS PAGE TO A REAL LOGIN PAGE
 //TODO : THEN I WILL CREATE THE REAL HOME PAGE FOR THE CONNECTED USER
 </script>
@@ -39,8 +40,15 @@ let userEmail: string = "";
                             placeholder="tonmail@gmail.com"
                             bind:value={userEmail}
                     />
+                    <input
+                            class="shadow appearance-none border rounded w-full p-3 mt-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-150 ease-in-out"
+                            id="password"
+                            type="password"
+                            placeholder="******"
+                            bind:value={password}
+                    />
                 </div>
-                <ButtonGradient text="Jouer" disabled={userEmail.trim().length === 0}/>
+                <ButtonGradient text="Jouer" disabled={userEmail.trim().length === 0 || password.trim().length === 0}/>
             </form>
         </div>
 
