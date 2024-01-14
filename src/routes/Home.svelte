@@ -1,10 +1,7 @@
 <script lang="ts">
 import Footer from "../components/Footer.svelte";
 import Nav from "../components/Nav.svelte";
-import ButtonGradient from "../components/ButtonGradient.svelte";
-
-let userEmail: string = "";
-let password: string = "";
+import SignInForm from "../components/forms/SignInForm.svelte";
 </script>
 
 <div class="h-full flex flex-col justify-between">
@@ -27,27 +24,14 @@ let password: string = "";
             </p>
 
             <form class="bg-secondary opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-                <div class="mb-4">
+                <div class="">
                     <label class="block text-primary py-2 font-bold mb-2" for="emailaddress">
                         Connecte-toi ou crée un compte pour jouer
                     </label>
 <!--TODO : Here display different form depending on if we want to sign up or sign in-->
-                    <input
-                            class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-150 ease-in-out"
-                            id="emailaddress"
-                            type="text"
-                            placeholder="tonmail@gmail.com"
-                            bind:value={userEmail}
-                    />
-                    <input
-                            class="shadow appearance-none border rounded w-full p-3 mt-3 text-gray-700 leading-tight focus:ring transform transition hover:scale-105 duration-150 ease-in-out"
-                            id="password"
-                            type="password"
-                            placeholder="******"
-                            bind:value={password}
-                    />
+                    <SignInForm />
+
                 </div>
-                <ButtonGradient text="Connexion" disabled={userEmail.trim().length === 0 || password.trim().length === 0}/>
             </form>
         </div>
 
