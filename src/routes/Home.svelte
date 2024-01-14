@@ -47,7 +47,7 @@ let password: string = "";
                             bind:value={password}
                     />
                 </div>
-                <ButtonGradient text="Jouer" disabled={userEmail.trim().length === 0 || password.trim().length === 0}/>
+                <ButtonGradient text="Connexion" disabled={userEmail.trim().length === 0 || password.trim().length === 0}/>
             </form>
         </div>
 
