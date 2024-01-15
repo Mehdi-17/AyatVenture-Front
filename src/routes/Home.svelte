@@ -1,8 +1,9 @@
 <script lang="ts">
     import Footer from "../components/Footer.svelte";
     import Nav from "../components/Nav.svelte";
-    import SignInForm from "../components/forms/SignInForm.svelte";
+    import SignInForm from "../components/forms/AuthenticationForm.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
+    import AuthenticationTabs from "../components/AuthenticationTabs.svelte";
 </script>
 
 <div class="h-full flex flex-col justify-between">
@@ -15,12 +16,8 @@
             <HeroBanner/>
 
             <form class="bg-secondary opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-                <label class="block text-primary py-2 font-bold mb-2" for="emailaddress">
-                    Connecte-toi ou crée un compte pour jouer
-                </label>
                 <!--TODO : Here display different form depending on if we want to sign up or sign in-->
-                <SignInForm/>
-
+                <AuthenticationTabs />
             </form>
         </div>
 
