@@ -1,7 +1,5 @@
 <script lang="ts">
     import classNames from "classnames";
-    import SignUpForm from "./forms/SignUpForm.svelte";
-    import SignInForm from "./forms/AuthenticationForm.svelte";
     import AuthenticationForm from "./forms/AuthenticationForm.svelte";
 
     let inActivatedButtonStyle: string = "rounded-t-lg border-b-2 border-transparent text-gray-400 pb-2 hover:text-gray-200 hover:border-gray-200";
