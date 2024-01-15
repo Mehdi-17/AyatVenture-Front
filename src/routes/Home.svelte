@@ -1,7 +1,6 @@
 <script lang="ts">
     import Footer from "../components/Footer.svelte";
     import Nav from "../components/Nav.svelte";
-    import SignInForm from "../components/forms/AuthenticationForm.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
     import AuthenticationTabs from "../components/AuthenticationTabs.svelte";
 </script>
