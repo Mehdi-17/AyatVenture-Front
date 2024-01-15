@@ -13,11 +13,7 @@
         <!--Left Col-->
         <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
             <HeroBanner/>
-
-            <form class="bg-secondary opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-                <!--TODO : Here display different form depending on if we want to sign up or sign in-->
-                <AuthenticationTabs />
-            </form>
+            <AuthenticationTabs/>
         </div>
 
         <!--Right Col-->
@@ -27,6 +23,5 @@
                  src="../src/assets/bismillah.png"/>
         </div>
     </div>
-
     <Footer/>
 </div>

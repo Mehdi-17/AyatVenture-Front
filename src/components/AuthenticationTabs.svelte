@@ -11,14 +11,18 @@
     }
 
 </script>
-<div class="w-full flex justify-around py-2 mb-2">
-    <button type="button" role="tab" class={classNames(activeTab === 1 ? activatedButtonStyle : inActivatedButtonStyle)}
-            on:click={() => setToActive(1)}>Inscription
-    </button>
 
-    <button type="button" role="tab" class={classNames(activeTab === 2 ? activatedButtonStyle : inActivatedButtonStyle)}
-            on:click={() => setToActive(2)}>Connexion
-    </button>
-</div>
+<form class="bg-secondary opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+    <div class="w-full flex justify-around py-2 mb-2">
+        <button type="button" role="tab"
+                class={classNames(activeTab === 1 ? activatedButtonStyle : inActivatedButtonStyle)}
+                on:click={() => setToActive(1)}>Inscription
+        </button>
 
-<AuthenticationForm signUp={activeTab === 1} />
+        <button type="button" role="tab"
+                class={classNames(activeTab === 2 ? activatedButtonStyle : inActivatedButtonStyle)}
+                on:click={() => setToActive(2)}>Connexion
+        </button>
+    </div>
+    <AuthenticationForm signUp={activeTab === 1}/>
+</form>
