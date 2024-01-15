@@ -2,7 +2,7 @@
     import Footer from "../components/Footer.svelte";
     import Nav from "../components/Nav.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
-    import AuthenticationTabs from "../components/AuthenticationTabs.svelte";
+    import AuthenticationForm from "../components/AuthenticationForm.svelte";
 </script>
 
 <div class="h-full flex flex-col justify-between">
@@ -13,7 +13,7 @@
         <!--Left Col-->
         <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
             <HeroBanner/>
-            <AuthenticationTabs/>
+            <AuthenticationForm/>
         </div>
 
         <!--Right Col-->
