@@ -1,6 +1,7 @@
 import type {Joker} from "./Joker";
 
 export class Game {
+    id: number;
     username:string;
     beginDate: Date;
     score: number;
@@ -10,6 +11,7 @@ export class Game {
 
 
     constructor(username: string, beginDate: Date, totalQuestion: number) {
+        this.id = 0;
         this.username = username;
         this.beginDate = beginDate;
         this.score = 0
