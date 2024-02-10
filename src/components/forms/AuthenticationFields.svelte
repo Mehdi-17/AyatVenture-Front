@@ -1,6 +1,7 @@
 <script lang="ts">
     import ButtonGradient from "../ButtonGradient.svelte";
     import {navigate} from "svelte-routing";
+    import {HOME_PAGE} from "../../constants";
 
     export let signUp: boolean;
     let userEmail: string = "";
@@ -15,7 +16,7 @@
             console.log(`Confirmation mot de passe => ${confirmPassword}`)
         }
 
-        navigate("/home");
+        navigate(HOME_PAGE);
     }
 </script>
 

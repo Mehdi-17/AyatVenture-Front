@@ -3,6 +3,8 @@
     import HeroBanner from "../components/HeroBanner.svelte";
     import {Game} from "../components/utils/Game";
     import {GameService} from "../service/GameService";
+    import {navigate} from "svelte-routing";
+    import {LOCAL_STORAGE_GAME, QUIZ_PAGE} from "../constants";
 
     const gameService = new GameService();
     const startNewGame = async () => {
@@ -13,10 +15,11 @@
         const gameToCreate = new Game(username, new Date(), totalQuestion);
 
         await gameService.createGame(gameToCreate).then(gameCreated => {
-            console.log("Game created : ", gameCreated);
+            localStorage.setItem(LOCAL_STORAGE_GAME, JSON.stringify(gameCreated));
+            navigate(QUIZ_PAGE);
         }).catch(error => {
             console.error('Error creating game:', error);
-        });;
+        });
     }
 </script>
 
