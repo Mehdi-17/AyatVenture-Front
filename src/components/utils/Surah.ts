@@ -1,4 +1,5 @@
 export interface Surah{
+    id: number;
     revelation_place: string;
     name_complex: string;
     name_arabic: string;
