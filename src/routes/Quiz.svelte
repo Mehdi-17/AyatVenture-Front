@@ -5,6 +5,7 @@
     import type {Surah} from "../components/utils/Surah";
     import type {Ayat} from "../components/utils/Ayat";
     import ButtonGradient from "../components/ButtonGradient.svelte";
+    import AnswerReveal from "../components/AnswerReveal.svelte";
 
     const gameService = new GameService();
     const gameSerialized = localStorage.getItem(LOCAL_STORAGE_GAME);
@@ -12,9 +13,9 @@
     let game: Game;
     let allSurahs: Surah[] = [];
     let ayatToFind: Ayat;
-    let goodAnswer: number;
+    let playerAnswer: Surah;
+    let goodAnswer: Surah;
     let surahIsFound: boolean;
-    let explanation: string;
 
     const getAllSurah = async () => {
         await gameService.getAllSurah().then((surahs: Surah[]) => {
@@ -25,13 +26,12 @@
     const getAnAyat = async () => {
         await gameService.getRandomAyat().then((ayat: Ayat) => {
             ayatToFind = ayat;
-            goodAnswer = parseInt(ayatToFind.verse_key.split(":")[0], 10);
         })
     }
 
     const checkResponse = (surahClicked: Surah) => {
-        surahIsFound = surahClicked.id === goodAnswer;
-        explanation = "Tu as choisi la sourate " + surahClicked.id + " : " + surahClicked.translated_name.name+".La bonne réponse est la sourate " + goodAnswer + " : " + allSurahs[goodAnswer-1].translated_name.name;
+        playerAnswer = surahClicked;
+        surahIsFound = surahClicked.id === ayatToFind.chapter_id;
     }
 
     if (gameSerialized) {
@@ -54,20 +54,18 @@
             </div>
         {/if}
 
-    <!--TODO: si une réponse est selectionnée, on l'affiche ici    -->
-        {#if surahIsFound === true}
-            <p>Bonne réponse.</p>
-            <p>{explanation}</p>
-        {:else if surahIsFound === false}
-            <p>Mauvaise réponse.</p>
-            <p>{explanation}</p>
+        <!--TODO: si une réponse est selectionnée, on l'affiche ici    -->
+        {#if surahIsFound !== undefined}
+            <AnswerReveal playerAnswer="{playerAnswer}" goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}"
+                          answerIsGood="{surahIsFound}"/>
         {/if}
     </div>
 
     <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 overflow-scroll p-2">
         {#if (allSurahs.length > 0)}
             {#each allSurahs as surah}
-                <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2" text={surah.id + ": " +surah.name_complex} disabled={false} />
+                <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2"
+                                text={surah.id + ": " +surah.name_complex} disabled={false}/>
             {/each}
         {/if}
     </div>
