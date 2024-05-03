@@ -7,7 +7,7 @@
     let radius = 50;
     let circumference = 2 * Math.PI * radius;
     let dashOffset = 0;
-    let strokeWidth= 4;
+    let strokeWidth= 5;
 
     const startTimer = () => {
         timerInterval = setInterval(() => {

@@ -45,35 +45,36 @@
     }
 </script>
 
-<div class="flex flex-row items-center h-full justify-center mx-20">
-
-    <div class="flex flex-col items-center">
-        <Timer {timeLeft} {stopTimer}/>
-        <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-full xl:w-4/5 shadow-lg rounded-lg p-5">
-            <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
-                Dans quelle sourate se trouve ce verset ?
-            </h1>
-            {#if (ayatToFind)}
+{#if (ayatToFind)}
+    <div class="flex flex-row items-center h-full justify-center mx-20">
+        <div class="flex flex-col items-center w-full xl:w-4/5">
+            <Timer {timeLeft} {stopTimer}/>
+            <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
+                <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
+                    Dans quelle sourate se trouve ce verset ?
+                </h1>
                 <div class="text-2xl flex flex-col items-center">
                     <p class="mb-2">{ayatToFind.text_uthmani}</p>
                     <p>{ayatToFind.translations[0].text.replace(/<[^>]+>[^<]*<\/[^>]+>/g, "")}</p>
                 </div>
-            {/if}
 
-            {#if surahIsFound !== undefined}
-                <AnswerReveal playerAnswer="{playerAnswer}" goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}"
-                              answerIsGood="{surahIsFound}"/>
+                {#if surahIsFound !== undefined}
+                    <AnswerReveal playerAnswer="{playerAnswer}" goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}"
+                                  answerIsGood="{surahIsFound}"/>
+                {/if}
+            </div>
+        </div>
+
+        <!--LEFT PANNEL        -->
+        <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 overflow-scroll p-2">
+            {#if (allSurahs.length > 0)}
+                {#each allSurahs as surah}
+                    <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2"
+                                    text={surah.id + ": " +surah.name_complex} disabled={false}/>
+                {/each}
             {/if}
         </div>
     </div>
+{/if}
 
-
-    <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 overflow-scroll p-2">
-        {#if (allSurahs.length > 0)}
-            {#each allSurahs as surah}
-                <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2"
-                                text={surah.id + ": " +surah.name_complex} disabled={false}/>
-            {/each}
-        {/if}
-    </div>
-</div>
+<!--TODO: develop a loader-->
