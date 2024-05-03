@@ -1,22 +1,26 @@
 <script lang="ts">
-
-    import {onDestroy, onMount} from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     export let timeLeft: number;
     export let stopTimer: boolean;
     let timerInterval: number;
+    let radius = 50;
+    let circumference = 2 * Math.PI * radius;
+    let dashOffset = 0;
+    let strokeWidth= 4;
 
     const startTimer = () => {
         timerInterval = setInterval(() => {
-            if (stopTimer === true){
+            if (stopTimer === true) {
                 clearInterval(timerInterval);
             }
             timeLeft--;
+            dashOffset = (1 - (timeLeft / 60)) * circumference;
             if (timeLeft === 0) {
                 clearInterval(timerInterval);
             }
-        }, 1000)
-    }
+        }, 1000);
+    };
 
     onMount(() => {
         startTimer();
@@ -25,10 +29,22 @@
     onDestroy(() => {
         clearInterval(timerInterval);
     });
-
 </script>
 
-
 <div class="mb-10">
-    <p>Il reste {timeLeft}</p>
+    <svg width="200" height="200" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r={radius} stroke="#000000" stroke-width="{strokeWidth}" fill="none" />
+        <circle
+                cx="50"
+                cy="50"
+                r={radius}
+                stroke="#93c5fd"
+                stroke-width="{strokeWidth}"
+                fill="none"
+                style="stroke-dasharray: {circumference}; stroke-dashoffset: {dashOffset}; transition: stroke-dashoffset 1s;"
+        />
+        <text x="50" y="50" dominant-baseline="middle" text-anchor="middle">
+            {timeLeft}
+        </text>
+    </svg>
 </div>
