@@ -32,7 +32,7 @@
 </script>
 
 <div class="mb-10">
-    <svg width="200" height="200" viewBox="0 0 100 100">
+    <svg width="200" height="200" viewBox="-10 -10 120 120">
         <circle cx="50" cy="50" r={radius} stroke="#000000" stroke-width="{strokeWidth}" fill="none" />
         <circle
                 cx="50"
