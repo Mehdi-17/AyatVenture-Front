@@ -7,17 +7,29 @@
     import ButtonGradient from "../components/ButtonGradient.svelte";
     import AnswerReveal from "../components/AnswerReveal.svelte";
     import Timer from "../components/Timer.svelte";
+    import {onMount} from "svelte";
 
     const gameService = new GameService();
-    const gameSerialized = localStorage.getItem(LOCAL_STORAGE_GAME);
 
     let game: Game;
     let allSurahs: Surah[] = [];
     let ayatToFind: Ayat;
     let playerAnswer: Surah;
     let surahIsFound: boolean;
+    let earnedPoints: number;
     let timeLeft: number = 60;
     let stopTimer: boolean = false;
+
+    onMount(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get("game");
+        //todo: récupérer la game crée en bdd grace à l'id dans l'url
+        //game = JSON.parse(gameSerialized);
+
+        getAnAyat();
+        getAllSurah();
+
+    });
 
     const getAllSurah = async () => {
         await gameService.getAllSurah().then((surahs: Surah[]) => {
@@ -35,13 +47,9 @@
         playerAnswer = surahClicked;
         surahIsFound = surahClicked.id === ayatToFind.chapter_id;
         stopTimer = true;
-    }
 
-    if (gameSerialized) {
-        game = JSON.parse(gameSerialized);
-
-        getAnAyat();
-        getAllSurah();
+        //todo change the seconde parameters when Jokers will works
+        earnedPoints = surahIsFound ? game.calculatePoints(timeLeft, 0) : 0;
     }
 </script>
 
@@ -59,13 +67,13 @@
                 </div>
 
                 {#if surahIsFound !== undefined}
-                    <AnswerReveal playerAnswer="{playerAnswer}" goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}"
-                                  answerIsGood="{surahIsFound}"/>
+                    <AnswerReveal goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}" answerIsGood="{surahIsFound}"
+                                  {playerAnswer} {earnedPoints}/>
                 {/if}
             </div>
         </div>
 
-        <!--LEFT PANNEL        -->
+        <!--RIGHT PANNEL-->
         <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 overflow-scroll p-2">
             {#if (allSurahs.length > 0)}
                 {#each allSurahs as surah}

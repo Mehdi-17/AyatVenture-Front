@@ -11,12 +11,12 @@
         //todo récupérer userName in localstorage
         const username = "testUser";
         //todo create selection of total question for user
-        const totalQuestion = 5
+        const totalQuestion = 5;
         const gameToCreate = new Game(username, new Date(), totalQuestion);
 
-        await gameService.createGame(gameToCreate).then(gameCreated => {
-            localStorage.setItem(LOCAL_STORAGE_GAME, JSON.stringify(gameCreated));
-            navigate(QUIZ_PAGE);
+        await gameService.createGame(gameToCreate).then((gameCreated: Game) => {
+            const queryParams = `?game=${gameCreated.id}`;
+            navigate(`${QUIZ_PAGE}${queryParams}`);
         }).catch(error => {
             console.error('Error creating game:', error);
         });

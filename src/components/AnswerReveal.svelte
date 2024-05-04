@@ -4,6 +4,7 @@
     export let playerAnswer: Surah;
     export let goodAnswer: Surah;
     export let answerIsGood: boolean;
+    export let earnedPoints: number;
 
     const backGroundAnswer = answerIsGood ? "bg-green-500" : "bg-red-600";
 </script>
@@ -22,4 +23,6 @@
             <div>{goodAnswer.translated_name.name}</div>
         </div>
     </div>
+
+    <p>Tu as gagné : {earnedPoints} point(s).</p>
 </div>
