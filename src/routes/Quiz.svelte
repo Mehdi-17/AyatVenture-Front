@@ -50,6 +50,7 @@
 
         //todo change the seconde parameters when Jokers will works
         earnedPoints = surahIsFound ? game.calculatePoints(timeLeft, 0) : 0;
+        //todo ajouter les points sur la game en bdd
     }
 </script>
 
