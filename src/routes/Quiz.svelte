@@ -4,8 +4,8 @@
     import type {Surah} from "../components/utils/Surah";
     import type {Ayat} from "../components/utils/Ayat";
     import ButtonGradient from "../components/ButtonGradient.svelte";
-    import AnswerReveal from "../components/AnswerReveal.svelte";
-    import Timer from "../components/Timer.svelte";
+    import AnswerReveal from "../components/quizz/AnswerReveal.svelte";
+    import Timer from "../components/quizz/Timer.svelte";
     import {onMount} from "svelte";
 
     const gameService = new GameService();
@@ -81,7 +81,7 @@
     }
 </script>
 
-{#if (ayatToFind)}
+{#if ayatToFind}
     <!--LEFT PANNEL-->
     <div class="flex flex-row items-center h-full justify-center mx-20">
         <div class="flex flex-col items-center w-full xl:w-4/5">

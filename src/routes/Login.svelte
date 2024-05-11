@@ -1,13 +1,10 @@
 <script lang="ts">
     import Footer from "../components/Footer.svelte";
-    import Nav from "../components/Nav.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
     import AuthenticationForm from "../components/AuthenticationForm.svelte";
 </script>
 
 <div class="h-full flex flex-col justify-between">
-    <Nav/>
-
     <!--Main-->
     <div class="container mx-auto flex flex-col md:flex-row items-center">
         <!--Left Col-->

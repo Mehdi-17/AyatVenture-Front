@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Surah} from "./utils/Surah";
+    import type {Surah} from "../utils/Surah";
 
     export let playerAnswer: Surah | null;
     export let goodAnswer: Surah;
