@@ -7,6 +7,7 @@
     import AnswerReveal from "../components/quizz/AnswerReveal.svelte";
     import Timer from "../components/quizz/Timer.svelte";
     import {onMount} from "svelte";
+    import Loader from "../components/quizz/Loader.svelte";
 
     const gameService = new GameService();
 
@@ -22,6 +23,7 @@
     let timerResetKey: number = 0;
 
     //TODO: features to develop : JOKERS
+    //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -119,6 +121,8 @@
             {/if}
         </div>
     </div>
+{:else }
+    <div class="h-full flex justify-center items-center">
+        <Loader/>
+    </div>
 {/if}
-
-<!--TODO: develop a loader-->
