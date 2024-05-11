@@ -4,7 +4,7 @@
     import {Game} from "../components/utils/Game";
     import {GameService} from "../service/GameService";
     import {navigate} from "svelte-routing";
-    import {LOCAL_STORAGE_GAME, QUIZ_PAGE} from "../constants";
+    import {QUIZ_PAGE} from "../constants";
 
     const gameService = new GameService();
     const startNewGame = async () => {
