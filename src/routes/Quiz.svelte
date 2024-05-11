@@ -14,10 +14,14 @@
     let allSurahs: Surah[] = [];
     let ayatToFind: Ayat;
     let playerAnswer: Surah;
-    let surahIsFound: boolean;
+    let surahIsFound: boolean | null;
     let earnedPoints: number;
     let stopTimer: boolean = false;
     let timeLeft: number = 60;
+    let usedJoker: number = 0;
+    let timerResetKey: number = 0;
+
+    //TODO: features to develop : JOKERS
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -41,6 +45,12 @@
     const getAnAyat = async () => {
         await gameService.getRandomAyat().then((ayat: Ayat) => {
             ayatToFind = ayat;
+            earnedPoints = 0;
+            timeLeft = 60;
+            stopTimer = false;
+            usedJoker = 0;
+            surahIsFound = null;
+            timerResetKey++;
         })
     }
 
@@ -49,25 +59,26 @@
         surahIsFound = surahClicked.id === ayatToFind.chapter_id;
         stopTimer = true;
 
-        //todo change the seconde parameters when Jokers will works
-        earnedPoints = surahIsFound ? calculatePoints(timeLeft, 0) : 0;
-        //todo ajouter les points sur la game en bdd
-    }
-
-    const calculatePoints = (timerVariable: number, jokerUsed: number): number => {
-        return Math.max(5, getPointsFromQuiz(timerVariable) - (jokerUsed * 5));
+        earnedPoints = surahIsFound ? Math.max(5, getPointsFromQuiz(timeLeft) - (usedJoker * 5)) : 0;
     }
 
     const getPointsFromQuiz = (timeLeft: number): number => {
         //todo trouver une meilleure méthode de calcule
         return 100 - (60 - timeLeft);
     }
+
+    const goToNextQuestion = () => {
+        //todo ajouter les points et incrémenter le question count sur la game en bdd
+        getAnAyat();
+    }
 </script>
 
 {#if (ayatToFind)}
     <div class="flex flex-row items-center h-full justify-center mx-20">
         <div class="flex flex-col items-center w-full xl:w-4/5">
-            <Timer {stopTimer} bind:timeLeft/>
+            {#key timerResetKey}
+                <Timer {stopTimer} bind:timeLeft/>
+            {/key}
             <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
                 <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
                     Dans quelle sourate se trouve ce verset ?
@@ -77,9 +88,14 @@
                     <p>{ayatToFind.translations[0].text.replace(/<[^>]+>[^<]*<\/[^>]+>/g, "")}</p>
                 </div>
 
-                {#if surahIsFound !== undefined}
+                {#if surahIsFound !== null && surahIsFound !== undefined}
                     <AnswerReveal goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}" answerIsGood="{surahIsFound}"
                                   {playerAnswer} {earnedPoints}/>
+
+                    {#if game.currentQuestionCount !== game.totalQuestion}
+                        <ButtonGradient on:click={() => goToNextQuestion()} text="Prochaine question" disabled={false}
+                                        additionalClass="my-2"/>
+                    {/if}
                 {/if}
             </div>
         </div>

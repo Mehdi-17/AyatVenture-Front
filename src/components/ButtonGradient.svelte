@@ -2,7 +2,7 @@
     export let disabled: boolean;
     export let text: string;
 
-    export let additionalClass: string;
+    export let additionalClass: string = '';
 </script>
 
 <button on:click

@@ -27,5 +27,5 @@
 <div class="container mx-auto flex flex-col h-full items-center justify-center">
     <HeroBanner/>
 
-    <ButtonGradient on:click={startNewGame} text="Lancer une partie" disabled={false} additionalClass=""/>
+    <ButtonGradient on:click={startNewGame} text="Lancer une partie" disabled={false}/>
 </div>
