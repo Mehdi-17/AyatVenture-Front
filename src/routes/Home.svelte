@@ -1,10 +1,11 @@
 <script lang="ts">
     import ButtonGradient from "../components/ButtonGradient.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
-    import {Game} from "../components/utils/Game";
+    import type {Game} from "../components/utils/Game";
     import {GameService} from "../service/GameService";
     import {navigate} from "svelte-routing";
     import {QUIZ_PAGE} from "../constants";
+    import {initGame} from "../components/utils/Game";
 
     const gameService = new GameService();
     const startNewGame = async () => {
@@ -12,7 +13,7 @@
         const username = "testUser";
         //todo create selection of total question for user
         const totalQuestion = 5;
-        const gameToCreate = new Game(username, new Date(), totalQuestion);
+        const gameToCreate: Game = initGame(username, new Date(), totalQuestion);
 
         await gameService.createGame(gameToCreate).then((gameCreated: Game) => {
             const queryParams = `?game=${gameCreated.id}`;
