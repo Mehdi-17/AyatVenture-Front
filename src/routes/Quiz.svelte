@@ -13,7 +13,7 @@
     let game: Game;
     let allSurahs: Surah[] = [];
     let ayatToFind: Ayat;
-    let playerAnswer: Surah;
+    let playerAnswer: Surah | null;
     let surahIsFound: boolean | null;
     let earnedPoints: number;
     let stopTimer: boolean = false;
@@ -50,16 +50,24 @@
             stopTimer = false;
             usedJoker = 0;
             surahIsFound = null;
+            playerAnswer = null;
             timerResetKey++;
         })
     }
 
-    const checkResponse = (surahClicked: Surah) => {
+    const checkResponse = (surahClicked: Surah | null) => {
+        if (surahClicked === null) {
+            surahIsFound = false;
+            earnedPoints = 0;
+            return;
+        }
+
         playerAnswer = surahClicked;
         surahIsFound = surahClicked.id === ayatToFind.chapter_id;
         stopTimer = true;
 
         earnedPoints = surahIsFound ? Math.max(5, getPointsFromQuiz(timeLeft) - (usedJoker * 5)) : 0;
+
     }
 
     const getPointsFromQuiz = (timeLeft: number): number => {
@@ -74,10 +82,11 @@
 </script>
 
 {#if (ayatToFind)}
+    <!--LEFT PANNEL-->
     <div class="flex flex-row items-center h-full justify-center mx-20">
         <div class="flex flex-col items-center w-full xl:w-4/5">
             {#key timerResetKey}
-                <Timer {stopTimer} bind:timeLeft/>
+                <Timer {stopTimer} bind:timeLeft on:timesUpEvent={()=>checkResponse(null)}/>
             {/key}
             <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
                 <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
@@ -101,7 +110,7 @@
         </div>
 
         <!--RIGHT PANNEL-->
-        <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 overflow-scroll p-2">
+        <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 rounded-lg overflow-scroll p-2">
             {#if (allSurahs.length > 0)}
                 {#each allSurahs as surah}
                     <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2"

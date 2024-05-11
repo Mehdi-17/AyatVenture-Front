@@ -1,7 +1,7 @@
 <script lang="ts">
     import type {Surah} from "./utils/Surah";
 
-    export let playerAnswer: Surah;
+    export let playerAnswer: Surah | null;
     export let goodAnswer: Surah;
     export let answerIsGood: boolean;
     export let earnedPoints: number;
@@ -13,11 +13,14 @@
     <p class="{backGroundAnswer}">{answerIsGood ? "Bonne réponse.".toUpperCase() : "Mauvaise réponse.".toUpperCase()}</p>
 
     <div class="w-full flex flex-row justify-around">
-        <div>
-            <p>Ta réponse:</p>
-            <div>{playerAnswer.translated_name.name}</div>
-        </div>
-
+        {#if playerAnswer !== null}
+            <div>
+                <p>Ta réponse:</p>
+                <div>{playerAnswer.translated_name.name}</div>
+            </div>
+        {:else }
+            <p>Temps écoulé.</p>
+        {/if}
         <div>
             <p>La bonne réponse:</p>
             <div>{goodAnswer.translated_name.name}</div>

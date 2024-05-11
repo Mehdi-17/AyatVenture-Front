@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {onDestroy, onMount} from "svelte";
+    import {createEventDispatcher, onDestroy, onMount} from "svelte";
 
     export let timeLeft: number;
     export let stopTimer: boolean;
@@ -8,6 +8,8 @@
     let circumference = 2 * Math.PI * radius;
     let dashOffset = 0;
     let strokeWidth= 5;
+
+    let dispatch = createEventDispatcher();
 
     onMount(() => {
         startTimer();
@@ -26,6 +28,7 @@
             dashOffset = (1 - (timeLeft / 60)) * circumference;
             if (timeLeft === 0) {
                 clearInterval(timerInterval);
+                dispatch('timesUpEvent');
             }
         }, 1000);
     };
