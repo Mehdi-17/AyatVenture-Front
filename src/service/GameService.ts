@@ -21,6 +21,17 @@ export class GameService {
         });
     }
 
+    async getGame(gameid: number): Promise<Game>{
+        return await fetch(`http://localhost:8080/games/${gameid}`, {
+            method: 'GET'
+        }).then(response => {
+            return response.json();
+        }).catch(error => {
+            console.log("Something went wrong with the get game operation.")
+            throw error;
+        });
+    }
+
     async getAllSurah(): Promise<Surah[]>{
         return await fetch("http://localhost:8080/quran/surahs")
             .then(response=>{

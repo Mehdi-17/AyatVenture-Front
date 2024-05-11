@@ -1,5 +1,4 @@
 <script lang="ts">
-    import {LOCAL_STORAGE_GAME} from "../constants";
     import type {Game} from "../components/utils/Game";
     import {GameService} from "../service/GameService";
     import type {Surah} from "../components/utils/Surah";
@@ -17,14 +16,16 @@
     let playerAnswer: Surah;
     let surahIsFound: boolean;
     let earnedPoints: number;
-    let timeLeft: number = 60;
     let stopTimer: boolean = false;
+    let timeLeft: number = 60;
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get("game");
-        //todo: récupérer la game crée en bdd grace à l'id dans l'url
-        //game = JSON.parse(gameSerialized);
+        const gameId: number = Number(urlParams.get("game"));
+
+        gameService.getGame(gameId).then((gameResponse: Game) => {
+            game = gameResponse;
+        });
 
         getAnAyat();
         getAllSurah();
@@ -49,15 +50,24 @@
         stopTimer = true;
 
         //todo change the seconde parameters when Jokers will works
-        earnedPoints = surahIsFound ? game.calculatePoints(timeLeft, 0) : 0;
+        earnedPoints = surahIsFound ? calculatePoints(timeLeft, 0) : 0;
         //todo ajouter les points sur la game en bdd
+    }
+
+    const calculatePoints = (timerVariable: number, jokerUsed: number): number => {
+        return Math.max(5, getPointsFromQuiz(timerVariable) - (jokerUsed * 5));
+    }
+
+    const getPointsFromQuiz = (timeLeft: number): number => {
+        //todo trouver une meilleure méthode de calcule
+        return 100 - (60 - timeLeft);
     }
 </script>
 
 {#if (ayatToFind)}
     <div class="flex flex-row items-center h-full justify-center mx-20">
         <div class="flex flex-col items-center w-full xl:w-4/5">
-            <Timer {timeLeft} {stopTimer}/>
+            <Timer {stopTimer} bind:timeLeft/>
             <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
                 <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
                     Dans quelle sourate se trouve ce verset ?

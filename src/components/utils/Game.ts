@@ -1,5 +1,6 @@
 import type {Joker} from "./Joker";
 
+//todo check pour modifier
 export class Game {
     id: number;
     username:string;
@@ -18,13 +19,5 @@ export class Game {
         this.totalQuestion = totalQuestion;
         this.currentQuestionCount = 0;
         this.jokers = [];
-    }
-
-    public calculatePoints(timeLeft: number, jokerUsed: number): number{
-        return Math.max(5, this.getPointsFromQuiz(timeLeft) - (jokerUsed * 5));
-    }
-
-    private getPointsFromQuiz(timeLeft: number): number{
-        return 100 - (timeLeft - 10) * 2;
     }
 }
