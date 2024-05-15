@@ -78,8 +78,13 @@
     }
 
     const goToNextQuestion = () => {
-        //todo ajouter les points et incrémenter le question count sur la game en bdd
-        getAnAyat();
+        game.currentQuestionCount++;
+        game.score += earnedPoints;
+
+        gameService.updateGame(game).then((updatedGame: Game) => {
+            game = updatedGame;
+            getAnAyat();
+        });
     }
 </script>
 
