@@ -22,8 +22,11 @@
     let usedJoker: number = 0;
     let timerResetKey: number = 0;
 
-    //TODO: features to develop : JOKERS
+    //TODO: MANAGE WARNING ERROR BECAUSE  void | Type
+
     //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
+    //TODO: when current count = 5 next is score board
+    //TODO: features to develop : JOKERS
 
     onMount(() => {
         const urlParams = new URLSearchParams(window.location.search);

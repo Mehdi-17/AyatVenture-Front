@@ -13,6 +13,8 @@
         const username = "testUser";
         const gameToCreate: Game = initGame(username, new Date());
 
+        //TODO: MANAGE WARNING ERROR BECAUSE  void | Type
+
         await gameService.createGame(gameToCreate).then((gameCreated: Game) => {
             const queryParams = `?game=${gameCreated.id}`;
             navigate(`${QUIZ_PAGE}${queryParams}`);
