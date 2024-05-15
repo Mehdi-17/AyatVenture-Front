@@ -16,14 +16,17 @@ export class GameService {
             },
             body: JSON.stringify(gameToCreate),
         }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Error http : ${response.status}`);
+            }
             return response.json();
         }).catch(error => {
-            console.log("Something went wrong with the game creation.");
+            console.log("Something went wrong with the game creation : ", error);
             throw error;
         });
     }
 
-    async updateGame(gameToUpdate: Game): Promise<Game>{
+    async updateGame(gameToUpdate: Game): Promise<Game> {
         return await fetch(`http://localhost:8080/games/${gameToUpdate.id}`, {
             method: 'PUT',
             headers: {
@@ -31,15 +34,17 @@ export class GameService {
             },
             body: JSON.stringify(gameToUpdate),
         }).then(response => {
-            //todo manage response when its an error
+            if (!response.ok) {
+                throw new Error(`Error Http : ${response.status}`);
+            }
             return response.json();
         }).catch(error => {
-            console.log("Something went wrong with the game update.");
+            console.log("Error when updating game : ", error);
             throw error;
-        })
+        });
     }
 
-    async getGame(gameid: number): Promise<Game>{
+    async getGame(gameid: number): Promise<Game> {
         return await fetch(`http://localhost:8080/games/${gameid}`, {
             method: 'GET'
         }).then(response => {
@@ -50,21 +55,21 @@ export class GameService {
         });
     }
 
-    async getAllSurah(): Promise<Surah[]>{
+    async getAllSurah(): Promise<Surah[]> {
         return await fetch("http://localhost:8080/quran/surahs")
-            .then(response=>{
-               return response.json();
+            .then(response => {
+                return response.json();
             }).catch(error => {
                 console.log("Something went wrong when get all surahs");
                 throw error;
             });
     }
 
-    async getRandomAyat(): Promise<Ayat>{
+    async getRandomAyat(): Promise<Ayat> {
         return await fetch("http://localhost:8080/quran/random")
-            .then(response =>{
+            .then(response => {
                 return response.json();
-            }).catch(error=>{
+            }).catch(error => {
                 console.log("Something went wrong when get a random ayah");
                 throw error;
             });
