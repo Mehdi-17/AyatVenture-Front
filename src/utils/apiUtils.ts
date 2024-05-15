@@ -1,4 +1,4 @@
-export async function handleResponse<T>(response: Response): Promise<T> {
+async function handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
         throw new Error(`HTTP Error : ${response.status}`)
     }
@@ -6,7 +6,7 @@ export async function handleResponse<T>(response: Response): Promise<T> {
     return response.json();
 }
 
-export async function handleError(error: Error) {
+async function handleError(error: Error) {
     console.log("Error occured : ", error);
     throw error;
 }

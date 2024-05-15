@@ -1,7 +1,7 @@
 import type {Game} from "../components/utils/Game";
 import type {Surah} from "../components/utils/Surah";
 import type {Ayat} from "../components/utils/Ayat";
-import {handleResponse, handleError, callApi} from "../utils/apiUtils";
+import {callApi} from "../utils/apiUtils";
 
 export class GameService {
     constructor() {
