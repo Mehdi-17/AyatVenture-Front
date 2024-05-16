@@ -13,9 +13,10 @@
         const username = "testUser";
         const gameToCreate: Game = initGame(username, new Date());
 
-        //TODO: MANAGE WARNING ERROR BECAUSE  void | Type
-
-        await gameService.createGame(gameToCreate).then((gameCreated: Game) => {
+        await gameService.createGame(gameToCreate).then((gameCreated: void | Game) => {
+            if (!gameCreated){
+                throw new Error('An error occured when creating a game.');
+            }
             const queryParams = `?game=${gameCreated.id}`;
             navigate(`${QUIZ_PAGE}${queryParams}`);
         }).catch(error => {

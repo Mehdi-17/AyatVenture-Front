@@ -22,8 +22,6 @@
     let usedJoker: number = 0;
     let timerResetKey: number = 0;
 
-    //TODO: MANAGE WARNING ERROR BECAUSE  void | Type
-
     //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
     //TODO: when current count = 5 next is score board
     //TODO: features to develop : JOKERS
@@ -32,8 +30,14 @@
         const urlParams = new URLSearchParams(window.location.search);
         const gameId: number = Number(urlParams.get("game"));
 
-        gameService.getGame(gameId).then((gameResponse: Game) => {
+        gameService.getGame(gameId).then((gameResponse: void | Game) => {
+            if (!gameResponse) {
+                throw new Error("Error get game.");
+            }
             game = gameResponse;
+
+        }).catch(error => {
+            console.log("Error get game : ", error)
         });
 
         getAnAyat();
@@ -42,13 +46,22 @@
     });
 
     const getAllSurah = async () => {
-        await gameService.getAllSurah().then((surahs: Surah[]) => {
+        await gameService.getAllSurah().then((surahs: void | Surah[]) => {
+            if (!surahs) {
+                throw new Error('Error when fetching all surahs');
+            }
             allSurahs = surahs;
+        }).catch(error => {
+            console.log("Error fetching all surah: ", error);
         });
     }
 
     const getAnAyat = async () => {
-        await gameService.getRandomAyat().then((ayat: Ayat) => {
+        await gameService.getRandomAyat().then((ayat: void | Ayat) => {
+            if (!ayat){
+                throw new Error("Error when getting random ayat");
+            }
+
             ayatToFind = ayat;
             earnedPoints = 0;
             timeLeft = 60;
@@ -57,7 +70,9 @@
             surahIsFound = null;
             playerAnswer = null;
             timerResetKey++;
-        })
+        }).catch(error => {
+            console.log("Error when getting random ayat: ", error);
+        });
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
@@ -84,9 +99,14 @@
         game.currentQuestionCount++;
         game.score += earnedPoints;
 
-        gameService.updateGame(game).then((updatedGame: Game) => {
+        gameService.updateGame(game).then((updatedGame: void | Game) => {
+            if(!updatedGame){
+                throw new Error("Error when updating game");
+            }
             game = updatedGame;
             getAnAyat();
+        }).catch(error => {
+            console.log("Error updating game : ", error);
         });
     }
 </script>
