@@ -127,6 +127,7 @@
                 <Timer {stopTimer} bind:timeLeft on:timesUpEvent={()=>checkResponse(null)}/>
             {/key}
             <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
+                <p>{game.currentQuestionCount}/{game.totalQuestion}</p>
                 <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
                     Dans quelle sourate se trouve ce verset ?
                 </h1>
