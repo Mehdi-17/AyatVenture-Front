@@ -21,6 +21,7 @@
     let timeLeft: number = 60;
     let usedJoker: number = 0;
     let timerResetKey: number = 0;
+    let isAnswerDivDisabled: boolean = false;
 
     //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
     //TODO: when current count = 5 next is score board
@@ -66,6 +67,7 @@
             earnedPoints = 0;
             timeLeft = 60;
             stopTimer = false;
+            isAnswerDivDisabled = false;
             usedJoker = 0;
             surahIsFound = null;
             playerAnswer = null;
@@ -76,6 +78,7 @@
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
+        isAnswerDivDisabled = true;
         if (surahClicked === null) {
             surahIsFound = false;
             earnedPoints = 0;
@@ -109,6 +112,10 @@
             console.log("Error updating game : ", error);
         });
     }
+
+    const goToGameScoreBoard = () => {
+        //todo develop
+    }
 </script>
 
 {#if ayatToFind}
@@ -134,13 +141,16 @@
                     {#if game.currentQuestionCount !== game.totalQuestion}
                         <ButtonGradient on:click={() => goToNextQuestion()} text="Prochaine question" disabled={false}
                                         additionalClass="my-2"/>
+                        {:else }
+                        <ButtonGradient on:click={() => goToGameScoreBoard()} text="Voir les résultats" disabled={false}
+                                        additionalClass="my-2"/>
                     {/if}
                 {/if}
             </div>
         </div>
 
         <!--RIGHT PANNEL-->
-        <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 rounded-lg overflow-scroll p-2">
+        <div class="flex flex-col items-center bg-secondary opacity-75 h-5/6 rounded-lg overflow-scroll p-2 {isAnswerDivDisabled ? 'pointer-events-none opacity-50' : '' }">
             {#if (allSurahs.length > 0)}
                 {#each allSurahs as surah}
                     <ButtonGradient on:click={() => checkResponse(surah)} additionalClass="my-2"
