@@ -17,7 +17,7 @@ export function initGame(username: string, beginDate: Date): Game {
         beginDate,
         score: 0,
         totalQuestion: 5,
-        currentQuestionCount: 1,
+        currentQuestionCount: 0,
         jokers: []
     };
 }
