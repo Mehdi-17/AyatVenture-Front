@@ -8,6 +8,9 @@
     import Timer from "../components/quizz/Timer.svelte";
     import {onMount} from "svelte";
     import Loader from "../components/quizz/Loader.svelte";
+    import {navigate} from "svelte-routing";
+    import {RESULTS_PAGE} from "../constants";
+    import {gameState} from "../stores/store";
 
     const gameService = new GameService();
 
@@ -28,22 +31,18 @@
     //TODO: features to develop : JOKERS
 
     onMount(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId: number = Number(urlParams.get("game"));
-
-        gameService.getGame(gameId).then((gameResponse: void | Game) => {
-            if (!gameResponse) {
-                throw new Error("Error get game.");
+        const unsubscribe = gameState.subscribe(value => {
+            if (value) {
+                game = value;
             }
-            game = gameResponse;
-
-        }).catch(error => {
-            console.log("Error get game : ", error)
         });
 
         getAnAyat();
         getAllSurah();
 
+        return () => {
+            unsubscribe();
+        }
     });
 
     const getAllSurah = async () => {
@@ -59,7 +58,7 @@
 
     const getAnAyat = async () => {
         await gameService.getRandomAyat().then((ayat: void | Ayat) => {
-            if (!ayat){
+            if (!ayat) {
                 throw new Error("Error when getting random ayat");
             }
 
@@ -72,6 +71,7 @@
             surahIsFound = null;
             playerAnswer = null;
             timerResetKey++;
+            game.currentQuestionCount++;
         }).catch(error => {
             console.log("Error when getting random ayat: ", error);
         });
@@ -99,23 +99,24 @@
     }
 
     const goToNextQuestion = () => {
-        game.currentQuestionCount++;
         game.score += earnedPoints;
 
         gameService.updateGame(game).then((updatedGame: void | Game) => {
-            if(!updatedGame){
+            if (!updatedGame) {
                 throw new Error("Error when updating game");
             }
-            game = updatedGame;
+            gameState.set(updatedGame);
+
+            if (game.currentQuestionCount === game.totalQuestion) {
+                navigate(`${RESULTS_PAGE}`);
+                return;
+            }
             getAnAyat();
         }).catch(error => {
             console.log("Error updating game : ", error);
         });
     }
 
-    const goToGameScoreBoard = () => {
-        //todo develop
-    }
 </script>
 
 {#if ayatToFind}
@@ -138,13 +139,10 @@
                     <AnswerReveal goodAnswer="{allSurahs[ayatToFind.chapter_id-1]}" answerIsGood="{surahIsFound}"
                                   {playerAnswer} {earnedPoints}/>
 
-                    {#if game.currentQuestionCount !== game.totalQuestion}
-                        <ButtonGradient on:click={() => goToNextQuestion()} text="Prochaine question" disabled={false}
-                                        additionalClass="my-2"/>
-                        {:else }
-                        <ButtonGradient on:click={() => goToGameScoreBoard()} text="Voir les résultats" disabled={false}
-                                        additionalClass="my-2"/>
-                    {/if}
+                    <ButtonGradient on:click={() => goToNextQuestion()}
+                                    text="{game.currentQuestionCount === game.totalQuestion ? 'Voir les résultats': 'Prochaine question'}"
+                                    disabled={false}
+                                    additionalClass="my-2"/>
                 {/if}
             </div>
         </div>
