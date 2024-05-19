@@ -27,7 +27,7 @@
     let isAnswerDivDisabled: boolean = false;
 
     //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
-    //TODO: when current count = 5 next is score board
+    //      =>reload don't break the game and the current answer
     //TODO: features to develop : JOKERS
 
     onMount(() => {
