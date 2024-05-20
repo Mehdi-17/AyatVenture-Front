@@ -1,6 +1,6 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from "svelte";
-    import {currentQuestionState, update} from "../../stores/store";
+    import {currentQuestionState} from "../../stores/store";
 
     export let timeLeft: number;
     export let stopTimer: boolean;
