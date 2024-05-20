@@ -1,5 +1,6 @@
 <script lang="ts">
     import {createEventDispatcher, onDestroy, onMount} from "svelte";
+    import {currentQuestionState, update} from "../../stores/store";
 
     export let timeLeft: number;
     export let stopTimer: boolean;
@@ -19,6 +20,13 @@
         clearInterval(timerInterval);
     });
 
+    const updateTimeLeftState = () => {
+        currentQuestionState.update(state => ({
+            ...state,
+            timeLeft
+        }));
+    }
+
     const startTimer = () => {
         timerInterval = setInterval(() => {
             if (stopTimer === true) {
@@ -26,6 +34,8 @@
             }
             timeLeft--;
             dashOffset = (1 - (timeLeft / 60)) * circumference;
+            updateTimeLeftState();
+
             if (timeLeft === 0) {
                 clearInterval(timerInterval);
                 dispatch('timesUpEvent');
