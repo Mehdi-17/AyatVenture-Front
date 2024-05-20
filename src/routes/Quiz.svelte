@@ -10,38 +10,54 @@
     import Loader from "../components/quizz/Loader.svelte";
     import {navigate} from "svelte-routing";
     import {RESULTS_PAGE} from "../constants";
-    import {gameState} from "../stores/store";
+    import {currentQuestionState, gameState} from "../stores/store";
 
     const gameService = new GameService();
 
-    let game: Game;
     let allSurahs: Surah[] = [];
-    let ayatToFind: Ayat;
+
+    let game: Game;
+
+    let ayatToFind: Ayat | null = null;
     let playerAnswer: Surah | null;
     let surahIsFound: boolean | null;
-    let earnedPoints: number;
+    let earnedPoints: number = 0;
     let stopTimer: boolean = false;
     let timeLeft: number = 60;
     let usedJoker: number = 0;
     let timerResetKey: number = 0;
     let isAnswerDivDisabled: boolean = false;
 
-    //TODO: manage what's happen when user hit reload button -> we have to keep the information (timer, ayah, etc.)
-    //      =>reload don't break the game and the current answer
     //TODO: features to develop : JOKERS
 
     onMount(() => {
-        const unsubscribe = gameState.subscribe(value => {
+        const unsubscribeGame = gameState.subscribe(value => {
             if (value) {
                 game = value;
             }
         });
 
-        getAnAyat();
+        const unsubscribeCurrentQuestion = currentQuestionState.subscribe(value => {
+            if (value) {
+                timeLeft = value.timeLeft;
+                ayatToFind = value.ayat;
+                usedJoker = value.usedJoker;
+                playerAnswer = value.playerAnswer;
+                timerResetKey = value.timerResetKey;
+                stopTimer = value.stopTimer;
+                isAnswerDivDisabled = value.isAnswerDivDisabled;
+                earnedPoints = value.earnedPoints;
+            }
+        });
+
+        if (ayatToFind === null) {
+            getAnAyat();
+        }
         getAllSurah();
 
         return () => {
-            unsubscribe();
+            unsubscribeGame();
+            unsubscribeCurrentQuestion();
         }
     });
 
@@ -57,20 +73,18 @@
     }
 
     const getAnAyat = async () => {
-        await gameService.getRandomAyat().then((ayat: void | Ayat) => {
-            if (!ayat) {
+        await gameService.getRandomAyat().then((randomAyat: void | Ayat) => {
+            if (!randomAyat) {
                 throw new Error("Error when getting random ayat");
             }
 
-            ayatToFind = ayat;
-            earnedPoints = 0;
-            timeLeft = 60;
-            stopTimer = false;
-            isAnswerDivDisabled = false;
-            usedJoker = 0;
+            currentQuestionState.update(state => ({
+                ...state,
+                ayat: randomAyat,
+                timerResetKey: timerResetKey + 1
+            }));
+
             surahIsFound = null;
-            playerAnswer = null;
-            timerResetKey++;
             game.currentQuestionCount++;
         }).catch(error => {
             console.log("Error when getting random ayat: ", error);
@@ -78,19 +92,25 @@
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
-        isAnswerDivDisabled = true;
         if (surahClicked === null) {
-            surahIsFound = false;
-            earnedPoints = 0;
+            currentQuestionState.update(state => ({
+                ...state,
+                surahIsFound: false,
+                earnedPoints: 0,
+                isAnswerDivDisabled: true
+            }));
             return;
         }
 
-        playerAnswer = surahClicked;
-        surahIsFound = surahClicked.id === ayatToFind.chapter_id;
-        stopTimer = true;
+        surahIsFound = surahClicked.id === ayatToFind?.chapter_id;
 
-        earnedPoints = surahIsFound ? Math.max(5, getPointsFromQuiz(timeLeft) - (usedJoker * 5)) : 0;
-
+        currentQuestionState.update(state => ({
+            ...state,
+            playerAnswer: surahClicked,
+            stopTimer: true,
+            isAnswerDivDisabled: true,
+            earnedPoints: surahIsFound ? Math.max(5, getPointsFromQuiz(timeLeft) - (usedJoker * 5)) : 0
+        }));
     }
 
     const getPointsFromQuiz = (timeLeft: number): number => {
@@ -106,6 +126,7 @@
                 throw new Error("Error when updating game");
             }
             gameState.set(updatedGame);
+            currentQuestionState.reset();
 
             if (game.currentQuestionCount === game.totalQuestion) {
                 navigate(`${RESULTS_PAGE}`);
