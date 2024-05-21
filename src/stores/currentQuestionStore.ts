@@ -1,10 +1,10 @@
 import {writable} from "svelte/store";
 import type {Writable} from "svelte/store";
-import type {Game} from "../components/utils/Game";
 import type {Ayat} from "../components/utils/Ayat";
 import type {Surah} from "../components/utils/Surah";
+import {getFromLocalStorage, saveToLocalStorage} from "../utils/localStorage";
 
-export const gameState: Writable<Game | null> = writable(null);
+const localStorageKey: string = 'CURRENT_QUESTION';
 
 const initialQuestionState: CurrentQuestion = {
     ayat: null,
@@ -17,7 +17,16 @@ const initialQuestionState: CurrentQuestion = {
     earnedPoints: 0,
 };
 
-export const {subscribe, set, update}: Writable<CurrentQuestion> = writable(initialQuestionState);
+const savedState = getFromLocalStorage(localStorageKey, initialQuestionState);
+
+export const {subscribe, set, update}: Writable<CurrentQuestion> = writable(savedState);
+
+subscribe((state: CurrentQuestion)=>{
+    if (state){
+        saveToLocalStorage(localStorageKey, state);
+    }
+});
+
 
 const resetQuestion = () => {
     update(state => {
