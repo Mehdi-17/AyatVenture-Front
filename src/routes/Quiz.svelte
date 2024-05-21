@@ -97,7 +97,6 @@
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
-        //Todo voir si le local storage se met bien à jour
         if (surahClicked === null) {
             currentQuestionState.update(state => ({
                 ...state,
