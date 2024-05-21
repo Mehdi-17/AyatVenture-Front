@@ -6,7 +6,8 @@
     import {navigate} from "svelte-routing";
     import {QUIZ_PAGE} from "../constants";
     import {initGame} from "../components/utils/Game";
-    import {gameState} from "../stores/store";
+    import {gameState} from "../stores/gameStore";
+    import {currentQuestionState} from "../stores/currentQuestionStore";
 
     const gameService = new GameService();
 
@@ -20,6 +21,7 @@
                 throw new Error('An error occured when creating a game.');
             }
 
+            currentQuestionState.reset();
             gameState.set(gameCreated);
             navigate(`${QUIZ_PAGE}`);
         }).catch(error => {

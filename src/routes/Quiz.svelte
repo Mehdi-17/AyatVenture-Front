@@ -10,7 +10,8 @@
     import Loader from "../components/quizz/Loader.svelte";
     import {navigate} from "svelte-routing";
     import {RESULTS_PAGE} from "../constants";
-    import {currentQuestionState, gameState} from "../stores/store";
+    import {gameState} from "../stores/gameStore";
+    import {currentQuestionState} from "../stores/currentQuestionStore";
 
     const gameService = new GameService();
 
@@ -85,13 +86,18 @@
             }));
 
             surahIsFound = null;
-            game.currentQuestionCount++;
+
+            gameState.update(state => ({
+                ...state,
+                currentQuestionCount: game.currentQuestionCount + 1
+            }));
         }).catch(error => {
             console.log("Error when getting random ayat: ", error);
         });
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
+        //Todo voir si le local storage se met bien à jour
         if (surahClicked === null) {
             currentQuestionState.update(state => ({
                 ...state,

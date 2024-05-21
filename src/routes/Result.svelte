@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import {gameState} from "../stores/store";
+    import {gameState} from "../stores/gameStore";
     import {onMount} from "svelte";
 
     let totalPoints: number | undefined;
