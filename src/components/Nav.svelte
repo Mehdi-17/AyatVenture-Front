@@ -7,3 +7,7 @@
         </a>
     </div>
 </div>
+
+
+<!--//TODO: au click sur le logo, si on est sur la page Quiz.svelte, demander uen confirmation pour quitter le quiz
+            Si il confirme, le quizz se termine avec le nombre de point en cours-->
