@@ -11,22 +11,11 @@
 
     const gameService = new GameService();
 
-    const startNewGame = async () => {
-        //todo récupérer userName in localstorage
+    const startNewGame = () => {
+        //todo récupérer username depuis le token de connexion
         const username = "testUser";
-        const gameToCreate: Game = initGame(username, new Date());
 
-        await gameService.createGame(gameToCreate).then((gameCreated: void | Game) => {
-            if (!gameCreated) {
-                throw new Error('An error occured when creating a game.');
-            }
-
-            currentQuestionState.reset();
-            gameState.set(gameCreated);
-            navigate(`${QUIZ_PAGE}`);
-        }).catch(error => {
-            console.error('Error creating game:', error);
-        });
+        gameService.initCreateGameAndRedirectToQuiz(username);
     }
 </script>
 
