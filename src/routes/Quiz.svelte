@@ -9,9 +9,10 @@
     import {onMount} from "svelte";
     import Loader from "../components/quizz/Loader.svelte";
     import {navigate} from "svelte-routing";
-    import {RESULTS_PAGE} from "../constants";
+    import {ERROR_GETTING_AYAT, ERROR_GETTING_SURAH, RESULTS_PAGE} from "../constants";
     import {gameState} from "../stores/gameStore";
     import {currentQuestionState} from "../stores/currentQuestionStore";
+    import type {CurrentQuestion} from "../stores/currentQuestionStore";
 
     const gameService = new GameService();
 
@@ -63,59 +64,61 @@
     });
 
     const getAllSurah = async () => {
-        await gameService.getAllSurah().then((surahs: void | Surah[]) => {
+        try {
+            const surahs = await gameService.getAllSurah();
             if (!surahs) {
-                throw new Error('Error when fetching all surahs');
+                console.error('Error when fetching all surahs');
+                displayError(ERROR_GETTING_SURAH);
+                return;
             }
             allSurahs = surahs;
-        }).catch(error => {
-            console.log("Error fetching all surah: ", error);
-        });
+        } catch (error) {
+            console.error("Error fetching all surah: ", error);
+            displayError(ERROR_GETTING_SURAH);
+        }
     }
 
     const getAnAyat = async () => {
-        await gameService.getRandomAyat().then((randomAyat: void | Ayat) => {
+        try {
+            const randomAyat = await gameService.getRandomAyat();
             if (!randomAyat) {
-                throw new Error("Error when getting random ayat");
+                console.error("Error when getting random ayat");
+                displayError(ERROR_GETTING_AYAT);
+                return;
             }
 
-            currentQuestionState.update(state => ({
-                ...state,
+            updateCurrentQuestionState({
                 ayat: randomAyat,
                 timerResetKey: timerResetKey + 1
-            }));
+            });
 
             surahIsFound = null;
 
-            gameState.update(state => ({
-                ...state,
-                currentQuestionCount: game.currentQuestionCount + 1
-            }));
-        }).catch(error => {
-            console.log("Error when getting random ayat: ", error);
-        });
+            updateGameState({currentQuestionCount: game.currentQuestionCount + 1});
+        } catch (error) {
+            console.error("Error when getting random ayat: ", error);
+            displayError(ERROR_GETTING_AYAT);
+        }
     }
 
     const checkResponse = (surahClicked: Surah | null) => {
         if (surahClicked === null) {
-            currentQuestionState.update(state => ({
-                ...state,
+            updateCurrentQuestionState({
                 surahIsFound: false,
                 earnedPoints: 0,
                 isAnswerDivDisabled: true
-            }));
+            });
             return;
         }
 
         surahIsFound = surahClicked.id === ayatToFind?.chapter_id;
 
-        currentQuestionState.update(state => ({
-            ...state,
+        updateCurrentQuestionState({
             playerAnswer: surahClicked,
             stopTimer: true,
             isAnswerDivDisabled: true,
             earnedPoints: surahIsFound ? Math.max(5, getPointsFromQuiz(timeLeft) - (usedJoker * 5)) : 0
-        }));
+        });
     }
 
     const getPointsFromQuiz = (timeLeft: number): number => {
@@ -143,11 +146,30 @@
         });
     }
 
+    const updateCurrentQuestionState = (updates: Partial<CurrentQuestion>) => {
+        currentQuestionState.update(state => ({
+            ...state,
+            ...updates
+        }));
+    };
+
+    const updateGameState = (updates: Partial<Game>) => {
+        gameState.update(state => ({
+            ...state,
+            ...updates
+        }));
+    };
+
+
+    const displayError = (messsage: string) => {
+        alert(messsage);
+    }
 </script>
 
 {#if ayatToFind}
-    <!--LEFT PANNEL-->
     <div class="flex flex-row items-center h-full justify-center mx-20">
+
+        <!--LEFT PANNEL-->
         <div class="flex flex-col items-center w-full xl:w-4/5">
             {#key timerResetKey}
                 <Timer {stopTimer} bind:timeLeft on:timesUpEvent={()=>checkResponse(null)}/>

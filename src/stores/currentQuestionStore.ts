@@ -10,6 +10,7 @@ const initialQuestionState: CurrentQuestion = {
     ayat: null,
     timeLeft: 60,
     usedJoker: 0,
+    surahIsFound: null,
     playerAnswer: null,
     timerResetKey: 0,
     stopTimer: false,
@@ -49,6 +50,7 @@ export interface CurrentQuestion {
     ayat: Ayat | null;
     timeLeft: number;
     usedJoker: number;
+    surahIsFound: boolean | null;
     playerAnswer: Surah | null;
     timerResetKey: number;
     stopTimer: boolean;
