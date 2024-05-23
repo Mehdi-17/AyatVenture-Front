@@ -1,13 +1,7 @@
 <script lang="ts">
     import ButtonGradient from "../components/ButtonGradient.svelte";
     import HeroBanner from "../components/HeroBanner.svelte";
-    import type {Game} from "../components/utils/Game";
     import {GameService} from "../service/GameService";
-    import {navigate} from "svelte-routing";
-    import {QUIZ_PAGE} from "../constants";
-    import {initGame} from "../components/utils/Game";
-    import {gameState} from "../stores/gameStore";
-    import {currentQuestionState} from "../stores/currentQuestionStore";
 
     const gameService = new GameService();
 
