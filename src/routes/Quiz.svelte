@@ -13,6 +13,7 @@
     import {gameState} from "../stores/gameStore";
     import {currentQuestionState} from "../stores/currentQuestionStore";
     import type {CurrentQuestion} from "../stores/currentQuestionStore";
+    import Joker from "../components/quizz/Joker.svelte";
 
     const gameService = new GameService();
 
@@ -103,6 +104,7 @@
 
     const checkResponse = (surahClicked: Surah | null) => {
         if (surahClicked === null) {
+            surahIsFound = false;
             updateCurrentQuestionState({
                 surahIsFound: false,
                 earnedPoints: 0,
@@ -174,7 +176,10 @@
                 <Timer {stopTimer} bind:timeLeft on:timesUpEvent={()=>checkResponse(null)}/>
             {/key}
             <div class="flex flex-col justify-center items-center bg-secondary opacity-75 mx-auto w-4/5 shadow-lg rounded-lg p-5">
-                <p>{game.currentQuestionCount}/{game.totalQuestion}</p>
+                <div class="w-full flex justify-between">
+                    <p class="font-bold">{game.currentQuestionCount}/{game.totalQuestion}</p>
+                    <Joker/>
+                </div>
                 <h1 class="my-4 text-3xl md:text-5xl text-white opacity-75 font-bold leading-tight text-center md:text-left">
                     Dans quelle sourate se trouve ce verset ?
                 </h1>
