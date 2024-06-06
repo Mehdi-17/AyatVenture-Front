@@ -8,6 +8,7 @@ const jokers = [
 </script>
 
 <div class="w-1/3 flex justify-around">
+<!--    Todo / disabled / enabled joker button and develop mechanics-->
     {#each jokers as joker}
         <button>
             <img src="{joker.src}" alt="{`icon_${joker.text}`}" class="border border-primary rounded p-1">
